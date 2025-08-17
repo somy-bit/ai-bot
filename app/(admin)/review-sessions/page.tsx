@@ -4,6 +4,7 @@ import { AllSessionInfo } from '@/types/types'
 import { auth } from '@clerk/nextjs/server'
 import React from 'react'
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
 async function ReviewSessions() {
 
@@ -11,7 +12,7 @@ async function ReviewSessions() {
       const { userId, redirectToSignIn } = await auth()
       if(!userId) redirectToSignIn()
 
-     const data = await fetch(`http://localhost:3000/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
+     const data = await fetch(`${baseUrl}/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
      const info:AllSessionInfo[] = await data.json()
 
   return (

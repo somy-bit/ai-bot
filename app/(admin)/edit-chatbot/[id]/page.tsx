@@ -12,6 +12,15 @@ import { JoinResults } from '@/types/types'
 import Characteristics from '@/components/Characteristics'
 import { handleDelete } from '@/lib/apiRequests'
 
+type ChtbotRes={
+   chatbot_id:string;
+    clerk_user_id: string;
+    name:string;
+    chatbot_created_at: string;
+    characteristic_id: string | null;
+    characteristic_chatbot_id:string| null;
+    content:string | null;
+}
 const dataCache = {}
 
 function page() {
@@ -34,7 +43,7 @@ function page() {
   const refreshData = (id:string)=>{
 
     let currentData = [...chatbotData]
-    let newDataset = currentData.filter(data=>(data.id!==id))
+    let newDataset = currentData.filter(data=>(data.characteristic_id!==id))
     setChatbotData(newDataset)
   }
 
@@ -46,7 +55,9 @@ function page() {
 
       })
 
-      const res: JoinResults[] = await data?.json()
+      const res = await data?.json() 
+      console.log('result ...........',res)
+     
       if (res[0]) {
         let name = res[0].name
         let bId = res[0].chatbot_id
@@ -63,7 +74,6 @@ function page() {
   }, [fetchTrigger])
 
   useEffect(() => {
-
 
 
     const url = `${process.env.BASE_URL}/chatbot/${id}`
@@ -86,14 +96,9 @@ function page() {
       })
       setAddingChars(false)
 
+      console.log('res',result)
       if(result?.status == 200){
 
-        //first tred to add it to state to make it look like it happens immidiately but then decided to reftch data 
-
-        // let newDataset = [...chatbotData]
-        // let newData={"name":chatbotName,"chatbot_id":id,"content":content,'id':'','clerk_user_id':'','created_at':''}
-        // newDataset = [...newDataset,newData]
-        // setChatbotData(newDataset)
         setFetchTrigger(fetchTrigger+1)
         toast.success("new characteristic added!")
 
@@ -138,7 +143,7 @@ function page() {
     try{
 
       setLoading(true)
-      const result = await handleDelete(`http://localhost:3000/api/mysql/assistly/chatbots/${id}`)
+      const result = await handleDelete(`/api/mysql/assistly/chatbots/${id}`)
      
       if(result.status == 200){
 
@@ -252,7 +257,7 @@ function page() {
             {
               chatbotData?.map((data)=>(  
                 <Characteristics
-                key={data.id} 
+                key={data.characteristic_id} 
                 data={data}
                 callback={refreshData}
                 />

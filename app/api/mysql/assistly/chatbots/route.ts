@@ -1,101 +1,86 @@
-import mysql from 'mysql2/promise';
 import { NextResponse, NextRequest } from 'next/server'
-import mysqlQuery from '../mysqlQuery';
-import { Chatbot } from '@/types/types';
-import { mergeObject } from '@/lib/utils';
-import { useAuth } from '@clerk/nextjs';
+import { query } from '@/lib/db'
 
-
+// POST: Insert a chatbot
 export async function POST(request: NextRequest) {
-
   try {
-
-
     const req = await request.json()
     const id = req.userId
     const name = req.name
 
-    let query = "INSERT INTO chatbots (clerk_user_id,name) VALUES (?,?)"
+    // ✅ Use $1, $2 for Postgres placeholders
+    const qry = "INSERT INTO chatbots (clerk_user_id, name) VALUES ($1, $2) RETURNING *"
+    const result = await query(qry, [id, name])
 
-    const result = await mysqlQuery(query , [id,name])
-
-
-
-    return NextResponse.json(result,{status:200})
-
+   
+    const bot = result[0];
+    bot.created_at = bot.created_at.toISOString();  
+     console.log(bot)  
+    return NextResponse.json(bot, { status: 200 })
   } catch (error) {
-
     console.log('ERROR: API - ', (error as Error).message)
 
-    const response = {
-      error: (error as Error).message,
-
-      returnedStatus: 200,
-    }
-
-    return NextResponse.json(response, { status: 200 })
+    return NextResponse.json(
+      { error: (error as Error).message, returnedStatus: 500 },
+      { status: 500 }
+    )
   }
 }
 
 
-export  async function GET(request:NextRequest){
 
 
-
-  try{
-
+// GET: Fetch chatbots + characteristics
+export async function GET(request: NextRequest) {
+  try {
     const reqUrl = request.nextUrl.searchParams
-   
     const userId = reqUrl.get('id')
-    console.log(reqUrl)
-    console.log(userId)
 
-    if(userId){
-       
-    let query =
-    "SELECT chatbots.* , chatbot_characteristics.content , chatbot_characteristics.chatbot_id FROM  chatbots LEFT JOIN  chatbot_characteristics  ON chatbots.id= chatbot_characteristics.chatbot_id where chatbots.clerk_user_id=? ORDER BY chatbots.id "
+    if (userId) {
+      const qry = `
+        SELECT chatbots.*, 
+               chatbot_characteristics.content, 
+               chatbot_characteristics.chatbot_id
+        FROM chatbots
+        LEFT JOIN chatbot_characteristics 
+        ON chatbots.id = chatbot_characteristics.chatbot_id
+        WHERE chatbots.clerk_user_id = $1
+        ORDER BY chatbots.id
+      `
 
-    const result:any = await mysqlQuery(query,[userId])
+      // ✅ Explicitly type the result as array of objects
+      type RowType = {
+        id: number
+        clerk_user_id: string
+        name: string
+        content: string | null
+        chatbot_id: number | null
+      }
 
-    const grouped:any ={}
+      const rows:RowType[] = await query(qry, [userId])
 
-    result.forEach((row:any)=>{
-      const id = row.id
+      const grouped: Record<number, any> = {}
 
-      if(!grouped[id]){
-
-        grouped[id] = {
-          ...row,
-          chars:[]
+      rows.forEach((row: RowType) => {
+        const id = row.id
+        if (!grouped[id]) {
+          grouped[id] = {
+            ...row,
+            chars: []
+          }
         }
-      }
-
-        grouped[id]={
+        grouped[id] = {
           ...grouped[id],
-          chars: [...grouped[id].chars,row.content]
-        
-      }
+          chars: [...grouped[id].chars, row.content]
+        }
+      })
 
-     
-     })
-    
-
- console.log("chatbot chars,,,,,,,,,,,,",grouped)
-
-
-
-    return NextResponse.json(grouped,{status:200})
-
-  
-
-    }else{
-
-      return NextResponse.json({"error":"error occured"},{status:500})
+      return NextResponse.json(grouped, { status: 200 })
+    } else {
+      return NextResponse.json({ error: 'error occurred' }, { status: 500 })
     }
-
-
-  }catch(error){
-
-    return NextResponse.json({"error":"error occured"},{status:500})
+  } catch (error) {
+    return NextResponse.json({ error: 'error occurred' }, { status: 500 })
   }
 }
+

@@ -1,5 +1,5 @@
 -- Create the chatbots table
-CREATE TABLE chatbots (
+CREATE TABLE IF NOT EXISTS chatbots (
     id SERIAL PRIMARY KEY,
     clerk_user_id VARCHAR(255) NOT NULL, -- Clerk's user ID
     name VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE chatbots (
 );
 
 -- Create the chatbot_characteristics table
-CREATE TABLE chatbot_characteristics (
+CREATE TABLE IF NOT EXISTS chatbot_characteristics (
     id SERIAL PRIMARY KEY,
     chatbot_id INT REFERENCES chatbots(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE chatbot_characteristics (
 );
 
 -- Create the guests table
-CREATE TABLE guests (
+CREATE TABLE IF NOT EXISTS guests (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255),
@@ -23,7 +23,7 @@ CREATE TABLE guests (
 );
 
 -- Create the chat_sessions table
-CREATE TABLE chat_sessions (
+CREATE TABLE IF NOT EXISTS chat_sessions (
     id SERIAL PRIMARY KEY,
     chatbot_id INT REFERENCES chatbots(id) ON DELETE CASCADE,
     guest_id INT REFERENCES guests(id) ON DELETE SET NULL,
@@ -31,7 +31,7 @@ CREATE TABLE chat_sessions (
 );
 
 -- Create the messages table
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     id SERIAL PRIMARY KEY,
     chat_session_id INT REFERENCES chat_sessions(id) ON DELETE CASCADE,
     content TEXT NOT NULL,

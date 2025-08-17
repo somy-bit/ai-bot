@@ -70,7 +70,7 @@ function ChatbotPage() {
     }
 
     const userMessage:Message ={
-      id:Date.now(),
+      id:Date.now()+1,
       content:message,
       sender:'user',
       created_at:Date.now().toLocaleString(),
@@ -128,7 +128,7 @@ function ChatbotPage() {
     console.log("guest inserted", chatId)
     setChatId(chatId)
     try {
-      const res = await fetch(`http://localhost:3000/api/mysql/assistly/messages?id=${chatId}`)
+      const res = await fetch(`/api/mysql/assistly/messages?id=${chatId}`)
       const data: Message[] = await res.json()
       setMessages(data)
 

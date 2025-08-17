@@ -2,7 +2,7 @@ export default async function startNewChat(guestName:string,guestEmail:string,ch
 
     try{
 
-        const res= await fetch("http://localhost:3000/api/mysql/assistly/guests",{
+        const res= await fetch("/api/mysql/assistly/guests",{
             method:"POST",
             body:JSON.stringify({
                 name:guestName,
@@ -13,7 +13,7 @@ export default async function startNewChat(guestName:string,guestEmail:string,ch
 
         const {id} =await res.json()
 
-        const sessionres = await fetch("http://localhost:3000/api/mysql/assistly/sessions",{
+        const sessionres = await fetch("/api/mysql/assistly/sessions",{
             method:"POST",
             body:JSON.stringify({
                 guestId :id,
@@ -23,7 +23,7 @@ export default async function startNewChat(guestName:string,guestEmail:string,ch
 
         const {sessionId} = await sessionres.json()
 
-        const messsgeRes = await fetch("http://localhost:3000/api/mysql/assistly/messages",{
+        const messsgeRes = await fetch("/api/mysql/assistly/messages",{
             method:"POST",
             body:JSON.stringify({
                 chatSessionId:sessionId,

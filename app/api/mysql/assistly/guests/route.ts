@@ -1,11 +1,9 @@
 
 import { NextResponse, NextRequest } from 'next/server'
-import mysql from 'mysql2/promise'
-import { GetDBSettings} from '../../../../../lib/utils'
-import { ResultSetHeader } from 'mysql2'
+import {query} from '@/lib/db'
 
-// define and export the GET handler function
-let connectionParams = GetDBSettings()
+
+
 
 export async function POST(request: Request) {
 
@@ -15,23 +13,25 @@ export async function POST(request: Request) {
         const name = body.name
         const email = body.email
 
-        let query = "INSERT INTO guests (guest_name,email) VALUES (?,?)"
+        console.log('Inserting guest:', name, email)
 
-        
-            const db =await mysql.createConnection(connectionParams)
-        
-            const [result] = await db.execute<ResultSetHeader>(query,[name,email])
-        
-            await db.end()
-        
-            return NextResponse.json({id:result.insertId},{status:200})
-    
-    
-    }catch(error){
+    const qry = `
+      INSERT INTO guests (name, email)
+      VALUES ($1, $2)
+      RETURNING id
+    `
 
-        throw error
+    const result = await query(qry, [name, email])
+        
+   return NextResponse.json({ id: result[0].id }, { status: 200 })
 
-    }
+  } catch (error) {
+    console.error('ERROR inserting guest:', error)
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    )
+  }
 
  
 }

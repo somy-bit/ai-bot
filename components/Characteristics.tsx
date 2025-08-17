@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useState } from 'react'
 import { OctagonX } from 'lucide-react'
 import { JoinResults } from '@/types/types'
@@ -16,7 +15,6 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { toast } from 'sonner'
-import { Button } from './ui/button'
 
 
 function Characteristics({ data, callback }: { data: JoinResults, callback: any }) {
@@ -27,11 +25,11 @@ function Characteristics({ data, callback }: { data: JoinResults, callback: any 
     const deleteCharbot = async () => {
         if(deleteing) return
         setDeleting(true)
-        const result = await handleDelete(`/api/mysql/assistly/chatbotcharacteristics/${data.id}`)
+        const result = await handleDelete(`/api/mysql/assistly/chatbotcharacteristics/${data.characteristic_id}`)
         // const resJson = await result.json()
         console.log(result.status)
         if (result.status == 200) {
-            callback(data.id)
+            callback(data.characteristic_id)
             setDeleting(false)
         }
         else if (result.status == 500) {

@@ -18,25 +18,23 @@ interface Grouped {
 
 function ChatbotSesstions({ data }: { data: AllSessionInfo[] }) {
 
-    var grouped: Record<number, Grouped> = [];
     const [result, setResult] = useState<Grouped[]>([])
 
 
     useEffect(() => {
-
-        grouped = data.reduce<Record<number, Grouped>>((acc, item) => {
+        const grouped = data.reduce<Record<number, Grouped>>((acc, item) => {
             if (!acc[item.cb_id]) {
                 acc[item.cb_id] = { id: item.cb_id, session: [] }
             }
-            acc[item.cb_id].session.push({ ...item })
-
+            acc[item.cb_id].session.push(item)
             return acc
-        }, {} as Record<number, Grouped>)
+        }, {})
 
         setResult(Object.values(grouped))
-        console.log("grpouping sessions ", result)
+        console.log("grouped data", grouped)
 
-    }, [])
+
+    }, [data])
 
     return (
         <div>

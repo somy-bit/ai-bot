@@ -72,10 +72,11 @@ export interface Message{
 }
 
 export interface JoinResults{
-    id:string;
-    clerk_user_id:string;
-    name:string;
-    created_at:string;
     chatbot_id:string;
-    content:string;
+    clerk_user_id:string;
+    name: string;
+    chatbot_created_at: string;
+    characteristic_id: string;
+    characteristic_chatbot_id: string;
+    content: string;
 }

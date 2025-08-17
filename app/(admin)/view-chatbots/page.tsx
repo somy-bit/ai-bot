@@ -8,6 +8,8 @@ import Link from 'next/link'
 import React from 'react'
 import { toast } from 'sonner'
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+
 async function page() {
 
     console.log("view page")
@@ -15,7 +17,7 @@ async function page() {
     if (!userId) return;
 
     console.log("view send req")
-    const results = await fetch(`http://localhost:3000/api/mysql/assistly/chatbots?id=${userId}`, { method: "GET" })
+    const results = await fetch(`${baseUrl}/api/mysql/assistly/chatbots?id=${userId}`, { method: "GET" })
 
     const chatbots = await results?.json() as Record<string, JoinChatbot>
     console.log('data fetched from composed', chatbots)

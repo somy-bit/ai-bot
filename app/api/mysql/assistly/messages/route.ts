@@ -1,38 +1,52 @@
 import { NextRequest, NextResponse } from "next/server";
-import mysqlQuery from "../mysqlQuery";
+import { query } from '@/lib/db'
 
-export async function POST(request:NextRequest){
+export async function POST(request: NextRequest) {
 
-    try{
+    try {
 
         const body = await request.json()
-        const chat_session_id= body.chatSessionId
+        const chat_session_id = body.chatSessionId
         const content = body.content
         const sender = body.sender
 
-        let query = 'INSERT INTO messages (chat_session_id,content,sender) VALUES (?,?,?)'
-        const res = await mysqlQuery(query,[chat_session_id,content,sender])
+        const qry = `
+      INSERT INTO messages (chat_session_id, content, sender)
+      VALUES ($1, $2, $3)
+      RETURNING *
+    `
+        const res = await query(qry, [chat_session_id, content, sender])
 
-        return NextResponse.json(res,{status:200})
-
-    }catch(error){
-        throw error
+        return NextResponse.json(res, { status: 200 })
+    } catch (error) {
+        console.log('ERROR creating message:', error)
+        return NextResponse.json(
+            { error: (error as Error).message },
+            { status: 500 }
+        )
     }
 }
 
-export async function GET(request:NextRequest){
+export async function GET(request: NextRequest) {
 
-    try{
-        const {searchParams} = new URL(request.url)
-        const id = searchParams.get('id') 
+    try {
+        const { searchParams } = new URL(request.url)
+        const id = searchParams.get('id')
 
-        let query ='SELECT * FROM messages where chat_session_id=?'
-        const results  = await mysqlQuery(query,[id!])
+        if (!id) {
+            return NextResponse.json({ error: 'chat_session_id is required' }, { status: 400 })
+        }
 
-        console.log("messages" ,results)
-        return NextResponse.json(results,{status:200})
+        const qry = 'SELECT * FROM messages WHERE chat_session_id = $1 ORDER BY created_at ASC'
+        const results = await query(qry, [id])
 
-    }catch(error){
-        throw error
+        console.log('Messages:', results)
+        return NextResponse.json(results, { status: 200 })
+    } catch (error) {
+        console.log('ERROR fetching messages:', error)
+        return NextResponse.json(
+            { error: (error as Error).message },
+            { status: 500 }
+        )
     }
 }

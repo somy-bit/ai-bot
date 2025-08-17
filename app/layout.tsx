@@ -3,11 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
+ 
 } from '@clerk/nextjs'
 import { Toaster } from "sonner";
 
