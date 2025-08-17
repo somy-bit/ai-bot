@@ -1,7 +1,7 @@
 'use client'
 
 import { Message } from '@/types/types'
-import React, {  useState } from 'react'
+import React from 'react'
 import Avatar from './Avatar';
 import { UserCircle } from 'lucide-react';
 import { useEffect, useRef } from "react"; 

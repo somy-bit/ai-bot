@@ -62,7 +62,7 @@ function Page() {
 
     fetchName()
 
-  }, [fetchTrigger])
+  }, [fetchTrigger,id])
 
   useEffect(() => {
 
