@@ -7,13 +7,7 @@ import { useUser } from '@clerk/nextjs'
 import Avatar from './Avatar'
 import { toast } from 'sonner'
 
-type Bot = {
-  id: string;
-  clerk_user_id: string;
-  name: string;
-  created_at: string;
 
-}
 
 function CreateChatbotButton() {
 
@@ -59,6 +53,7 @@ function CreateChatbotButton() {
     }
     catch (error) {
 
+      console.log(error)
       setInserting(false)
       toast.error("oops we are sorry! something went wrong")
     }

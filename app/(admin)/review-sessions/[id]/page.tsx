@@ -5,14 +5,15 @@ import { SessionContent } from "@/types/types";
 
 export const dynamic = "force-dynamic";
 
+const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-async function ReviewSession({ params }:{params:any}) {
+async function ReviewSession({ params }:{ params: { id: string } }) {
 
   const {id} = await params;
 
 
 
-  const data  = await fetch(`http://localhost:3000/api/mysql/assistly/sessions/${id}`, { method: "GET" })
+  const data  = await fetch(`${BaseUrl}/api/mysql/assistly/sessions/${id}`, { method: "GET" })
   const contents : SessionContent[] = await data.json() 
   const messages = extractMessage(contents)
  

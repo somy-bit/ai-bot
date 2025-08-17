@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+ 
 } from '../../../../components/ui/dialog'
 import { Message } from '@/types/types'
 import { Input } from '@/components/ui/input'
@@ -37,7 +37,7 @@ function ChatbotPage() {
   const [loading, setLoading] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [chatId, setChatId] = useState()
-  //const [id, setId] = useState()
+  
 
   const params = useParams()
   const id = params?.id
@@ -108,13 +108,14 @@ function ChatbotPage() {
       })
 
       const result = await response.json()
+
 //replacing AI message with message thinking 
       setMessages((prevMessage)=>
         prevMessage.map(msg=>msg.id === loadingMessage.id ? {...msg,content:result.content,id:result.id}:msg)
   
       )
     }catch(error){
-      console.log("error","couldent save data in messages")
+      console.log("error","couldent save data in messages"+error)
     }
   }
 
@@ -133,6 +134,8 @@ function ChatbotPage() {
       setMessages(data)
 
     } catch (error) {
+      
+      console.log("error fetching messages", error)
       toast.error("couldn't get messages for this bot")
     }
     setLoading(false)
@@ -146,7 +149,7 @@ function ChatbotPage() {
         <DialogContent className='sm:max-w-[425px]'>
           <form onSubmit={handleInformationSubmit}>
             <DialogHeader>
-              <DialogTitle>Let's help you out</DialogTitle>
+              <DialogTitle>Let&apos;s help you out</DialogTitle>
               <DialogDescription>I just need a few details to get started</DialogDescription>
             </DialogHeader>
 

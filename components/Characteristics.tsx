@@ -8,7 +8,6 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
-    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -17,7 +16,7 @@ import {
 import { toast } from 'sonner'
 
 
-function Characteristics({ data, callback }: { data: JoinResults, callback: any }) {
+function Characteristics({ data, callback }: { data: JoinResults, callback: (id:string)=>void }) {
 
 
     const [deleteing, setDeleting] = useState(false)

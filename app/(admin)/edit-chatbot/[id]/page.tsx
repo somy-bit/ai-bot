@@ -3,27 +3,18 @@
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { FormEvent, useEffect, useState } from 'react'
-import { redirect, useParams, useRouter } from 'next/navigation'
+import {  useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Copy, Divide } from 'lucide-react'
+import { Copy } from 'lucide-react'
 import { toast } from 'sonner'
 import Avatar from '@/components/Avatar'
 import { JoinResults } from '@/types/types'
 import Characteristics from '@/components/Characteristics'
 import { handleDelete } from '@/lib/apiRequests'
 
-type ChtbotRes={
-   chatbot_id:string;
-    clerk_user_id: string;
-    name:string;
-    chatbot_created_at: string;
-    characteristic_id: string | null;
-    characteristic_chatbot_id:string| null;
-    content:string | null;
-}
-const dataCache = {}
 
-function page() {
+
+function Page() {
 
   const { id } = useParams<{ id: string }>()
 
@@ -42,8 +33,8 @@ function page() {
 
   const refreshData = (id:string)=>{
 
-    let currentData = [...chatbotData]
-    let newDataset = currentData.filter(data=>(data.characteristic_id!==id))
+    const currentData = [...chatbotData]
+    const newDataset = currentData.filter(data=>(data.characteristic_id!==id))
     setChatbotData(newDataset)
   }
 
@@ -59,9 +50,9 @@ function page() {
       console.log('result ...........',res)
      
       if (res[0]) {
-        let name = res[0].name
-        let bId = res[0].chatbot_id
-        setChatbotName(name)
+       
+        
+        setChatbotName(res[0].name)
         setChatbotData(res)
        
       }
@@ -109,6 +100,7 @@ function page() {
       }
 
     }catch(error){
+      console.log(error)
       toast.error("unfortunately some error occured in the server,please try again later")
     }
   }
@@ -119,7 +111,7 @@ function page() {
 
     try{
 
-      const res  = await fetch(`/api/mysql/assistly/chatbots/${id}`,{
+       await fetch(`/api/mysql/assistly/chatbots/${id}`,{
         method:"PUT",
         body:JSON.stringify({
           id:id,
@@ -128,6 +120,7 @@ function page() {
       })
     }catch(error){
 
+      console.log(error)
       toast.error("something went wrong try again later")
     }
 
@@ -155,6 +148,7 @@ function page() {
       }
 
     }catch(error){
+      console.log(error)
       setLoading(false)
       toast.error("oops something went wrong , please try later")
     }
@@ -270,4 +264,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

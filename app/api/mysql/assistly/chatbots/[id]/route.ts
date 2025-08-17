@@ -30,7 +30,7 @@ WHERE ch.id = $1
     const result = await query(qry, [id])
     console.error('res', result)
 
-    const data = result.map((row: any) => ({
+    const data = result.map((row) => ({
       ...row,
       chatbot_created_at: row.chatbot_created_at.toISOString(),
     }))
@@ -107,7 +107,7 @@ export async function PUT(request: NextRequest) {
     const updateQuery = `UPDATE chatbots SET name = $1 WHERE id = $2 RETURNING *`
     const result = await query(updateQuery, [newName, id])
 
-    const data = result.map((row: any) => ({
+    const data = result.map((row) => ({
       ...row,
       created_at: row.created_at.toISOString(),
     }))

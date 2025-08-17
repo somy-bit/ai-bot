@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     `
         const results = await query(qry, [chatbot_id!])
 
-        const chatbot = results.map((row: any) => ({
+        const chatbot = results.map((row) => ({
             ...row,
             created_at: row.created_at?.toISOString()
         }))
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
 
         const qryMsg = 'SELECT * FROM messages WHERE chat_session_id = $1 ORDER BY created_at ASC'
-        const sessionQry = 'SELECT * FROM chat_sessions WHERE id = $1'
+      
         const messages = await query(qryMsg, [chat_session_id])
 
         const fromattedMessages: ChatCompletionMessageParam[] = messages.map((msg) => ({
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       VALUES ($1, 'user', $2)
       RETURNING id, created_at
     `
-        const result = await query(qryInsert, [content, chat_session_id])
+         await query(qryInsert, [content, chat_session_id])
 
         //insert ai message to db
         const qryInsertAi = `

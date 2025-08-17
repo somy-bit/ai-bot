@@ -2,11 +2,11 @@ export const dynamic = "force-dynamic"
 
 import Avatar from '@/components/Avatar'
 import { Button } from '@/components/ui/button'
-import { Chatbot, JoinChatbot } from '@/types/types'
+import {  JoinChatbot } from '@/types/types'
 import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import React from 'react'
-import { toast } from 'sonner'
+
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 

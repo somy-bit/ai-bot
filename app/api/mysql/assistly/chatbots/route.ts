@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { query } from '@/lib/db'
 
+
+
 // POST: Insert a chatbot
 export async function POST(request: NextRequest) {
   try {
@@ -12,10 +14,10 @@ export async function POST(request: NextRequest) {
     const qry = "INSERT INTO chatbots (clerk_user_id, name) VALUES ($1, $2) RETURNING *"
     const result = await query(qry, [id, name])
 
-   
+
     const bot = result[0];
-    bot.created_at = bot.created_at.toISOString();  
-     console.log(bot)  
+    bot.created_at = bot.created_at.toISOString();
+    console.log(bot)
     return NextResponse.json(bot, { status: 200 })
   } catch (error) {
     console.log('ERROR: API - ', (error as Error).message)
@@ -56,10 +58,13 @@ export async function GET(request: NextRequest) {
         content: string | null
         chatbot_id: number | null
       }
+      interface GroupedRow extends RowType {
+        chars: string[]
+      }
 
-      const rows:RowType[] = await query(qry, [userId])
+      const rows: RowType[] = await query(qry, [userId])
 
-      const grouped: Record<number, any> = {}
+      const grouped: Record<number, GroupedRow> = {}
 
       rows.forEach((row: RowType) => {
         const id = row.id
@@ -69,17 +74,15 @@ export async function GET(request: NextRequest) {
             chars: []
           }
         }
-        grouped[id] = {
-          ...grouped[id],
-          chars: [...grouped[id].chars, row.content]
-        }
-      })
+        grouped[id].chars.push(row.content??'')
+        })
 
       return NextResponse.json(grouped, { status: 200 })
     } else {
       return NextResponse.json({ error: 'error occurred' }, { status: 500 })
     }
   } catch (error) {
+    console.log('ERROR: API - ', (error as Error).message)
     return NextResponse.json({ error: 'error occurred' }, { status: 500 })
   }
 }

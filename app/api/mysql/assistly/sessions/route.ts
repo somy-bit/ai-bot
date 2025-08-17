@@ -1,7 +1,7 @@
 
 import { NextResponse, NextRequest } from 'next/server'
 import {query } from '@/lib/db'
-import { auth } from '@clerk/nextjs/server'
+
 
 
 

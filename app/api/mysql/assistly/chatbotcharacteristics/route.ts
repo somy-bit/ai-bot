@@ -62,7 +62,7 @@ export async function GET(req:NextRequest){
     `
     const results = await query(qry,[chatbot_id!])
 
-       const data = results.map((row: any) => ({
+       const data = results.map((row) => ({
       ...row,
       created_at: row.created_at?.toISOString()
     }))
