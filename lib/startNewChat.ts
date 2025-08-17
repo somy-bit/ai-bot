@@ -23,7 +23,7 @@ export default async function startNewChat(guestName:string,guestEmail:string,ch
 
         const {sessionId} = await sessionres.json()
 
-        const messsgeRes = await fetch("/api/mysql/assistly/messages",{
+        await fetch("/api/mysql/assistly/messages",{
             method:"POST",
             body:JSON.stringify({
                 chatSessionId:sessionId,

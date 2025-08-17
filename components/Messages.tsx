@@ -1,6 +1,6 @@
 'use client'
 
-import { Message, SessionContent } from '@/types/types'
+import { Message } from '@/types/types'
 import React, {  useState } from 'react'
 import Avatar from './Avatar';
 import { UserCircle } from 'lucide-react';
@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 
 function Messages({ contents }: { contents: Message[]  }) {
 
-    const [data, setData] = useState<Message[]>()
+   
     
     const ref = useRef<HTMLDivElement>(null) 
 
@@ -22,7 +22,7 @@ function Messages({ contents }: { contents: Message[]  }) {
             ref.current.scrollIntoView({behavior:'smooth'})
         }
 
-    },[data])
+    },[contents])
   
 
 

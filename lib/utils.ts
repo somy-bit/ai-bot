@@ -19,21 +19,7 @@ export interface IDBSettings {
 }
 
 export const GetDBSettings = (): IDBSettings => {
-  // const env = process.env.NODE_ENV
-
-  // if (env == 'development')
-  //   return {
-  //     host: process.env.host_dev!, //'58.84.143.251',
-
-  //     port: parseInt(process.env.port_dev!),
-
-  //     user: process.env.user_dev!,
-
-  //     password: process.env.password_dev!,
-
-  //     database: process.env.database_dev!,
-  //   }
-  // else
+ 
     return {
       host: process.env.host!, //'58.84.143.251',
 
@@ -47,11 +33,11 @@ export const GetDBSettings = (): IDBSettings => {
     }
 }
 
-export const mergeObject = (arr:any)=>{
+export const mergeObject = (arr: Record<string, unknown>[]): Record<string, unknown>=>{
   if(!arr.length)return{}
 
-  const common:any={}
-  const merged:any = {}
+   const common: Record<string, unknown> = {}
+  const merged: Record<string, unknown> = {}
 
   const keys = Object.keys(arr[0]);
   keys.forEach(key=>{
@@ -70,7 +56,7 @@ export const mergeObject = (arr:any)=>{
     }
   })
 
-  arr.forEach((obj:any)=>{
+  arr.forEach((obj)=>{
     Object.entries(obj).forEach(([key,value])=>{
       merged[key]=value
     })
@@ -82,7 +68,7 @@ export const mergeObject = (arr:any)=>{
 
 export const extractMessage = (data:SessionContent[]) =>{
 
-  let messages:Message[] = []
+  const messages:Message[] = []
   data.map(item=>{
     messages.push({sender:item.sender,chat_session_id:item.chat_session_id,content:item.content,id:item.id,created_at:item.created_at})
   })
