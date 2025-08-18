@@ -5,21 +5,19 @@ import { extractMessage } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-
+ const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export default function ReviewSessionContent() {
 
   const params = useParams();
   const [messages, setMessages] = useState<SessionContent[]>([]);
   const sessionId = params.id as string;
-  if (!sessionId) {
-    return <div className="flex-1 p-10 pb-24">Session ID is missing.</div>;
-  }
+ 
 
   useEffect(() => {
 
     async function getData() {
-      const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+     
       const res = await fetch(`${BaseUrl}/api/mysql/assistly/sessions/${sessionId}`);
       const contents: SessionContent[] = await res.json();
       const sessionmessages = extractMessage(contents) as SessionContent[];
@@ -34,6 +32,9 @@ export default function ReviewSessionContent() {
 
   }, [sessionId])
 
+ if (!sessionId) {
+    return <div className="flex-1 p-10 pb-24">Session ID is missing.</div>;
+  }
 
   return (
     <div className="flex-1 p-10 pb-24">
