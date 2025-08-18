@@ -3,17 +3,13 @@ import Messages from "@/components/Messages";
 import { extractMessage } from "@/lib/utils";
 
 
-interface ReviewSessionProps {
-  params: {
-    id: string;
-  }
-}
+
 
 export const dynamic = "force-dynamic";
 
 const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-export default async function ReviewSession({ params }: ReviewSessionProps) {
+export default async function ReviewSession({ params }: { params: { id: string } }) {
   const { id } = params;
 
   const res = await fetch(`${BaseUrl}/api/mysql/assistly/sessions/${id}`, { method: "GET" });
