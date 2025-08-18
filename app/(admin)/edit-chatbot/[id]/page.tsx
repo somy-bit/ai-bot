@@ -67,7 +67,7 @@ function Page() {
   useEffect(() => {
 
 
-    const url = `${process.env.BASE_URL}/chatbot/${id}`
+    const url = `${process.env.NEXT_PUBLIC_APP_UR}/chatbot/${id}`
     setUrl(url)
 
   }, [id])
