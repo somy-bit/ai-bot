@@ -9,7 +9,13 @@ export const dynamic = "force-dynamic";
 
 const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-export default async function ReviewSession({ params }: { params: { id: string } }) {
+export default async function ReviewSession({
+  params,
+  searchParams:_searchParams,
+}: {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+})  {
   const { id } = params;
 
   const res = await fetch(`${BaseUrl}/api/mysql/assistly/sessions/${id}`, { method: "GET" });
