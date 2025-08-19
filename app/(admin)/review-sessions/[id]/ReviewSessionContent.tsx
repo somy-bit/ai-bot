@@ -5,20 +5,22 @@ import { extractMessage } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
- const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+ const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL ;
 
 export default function ReviewSessionContent() {
+
+  alert(BaseUrl)
 
   const params = useParams();
   const [messages, setMessages] = useState<SessionContent[]>([]);
   const sessionId = params.id as string;
  
-
+console.log('base url',BaseUrl)
   useEffect(() => {
 
     async function getData() {
      
-      const res = await fetch(`${BaseUrl}/api/mysql/assistly/sessions/${sessionId}`);
+      const res = await fetch(`/api/mysql/assistly/sessions/${sessionId}`);
       const contents: SessionContent[] = await res.json();
       const sessionmessages = extractMessage(contents) as SessionContent[];
       setMessages(sessionmessages)
