@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function ReviewSessionContent() {
 
-  alert(BaseUrl)
+
 
   const params = useParams();
   const [messages, setMessages] = useState<SessionContent[]>([]);
