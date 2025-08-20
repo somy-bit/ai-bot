@@ -2,6 +2,7 @@
 import ChatbotSesstions from '@/components/ChatbotSesstions'
 import { AllSessionInfo } from '@/types/types'
 import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
@@ -9,10 +10,10 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 async function ReviewSessions() {
 
     
-      const { userId, redirectToSignIn } = await auth()
-      if(!userId) redirectToSignIn()
+      const { userId } = await auth()
+     if (!userId) redirect("/login")
 
-     const data = await fetch(`${baseUrl}/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
+     const data = await fetch(`/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
      const info:AllSessionInfo[] = await data.json()
 
   return (
