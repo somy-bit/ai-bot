@@ -29,7 +29,7 @@ function Page() {
   const [addingChars,setAddingChars] = useState(false)
   const [fetchTrigger,setFetchTrigger] = useState(1)
 
-
+const BaseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
   const refreshData = (id:string)=>{
 
@@ -41,7 +41,7 @@ function Page() {
   useEffect(() => {
     const fetchName = async () => {
 
-      const data = await fetch(`/api/mysql/assistly/chatbots/${id}`, {
+      const data = await fetch(`${BaseUrl}/api/mysql/assistly/chatbots/${id}`, {
         method: "get",
 
       })
@@ -67,7 +67,7 @@ function Page() {
   useEffect(() => {
 
 
-    const url = `${process.env.NEXT_PUBLIC_APP_UR}/chatbot/${id}`
+    const url = `${process.env.NEXT_PUBLIC_APP_URL}/chatbot/${id}`
     setUrl(url)
 
   }, [id])
@@ -78,7 +78,7 @@ function Page() {
     try{
 
       setAddingChars(true)
-      const result = await fetch('/api/mysql/assistly/chatbotcharacteristics',{
+      const result = await fetch(`${BaseUrl}/api/mysql/assistly/chatbotcharacteristics`,{
         method:"POST",
         body:JSON.stringify({
           "chatbot_id":id,
@@ -111,7 +111,7 @@ function Page() {
 
     try{
 
-       await fetch(`/api/mysql/assistly/chatbots/${id}`,{
+       await fetch(`${BaseUrl}/api/mysql/assistly/chatbots/${id}`,{
         method:"PUT",
         body:JSON.stringify({
           id:id,
@@ -136,7 +136,7 @@ function Page() {
     try{
 
       setLoading(true)
-      const result = await handleDelete(`/api/mysql/assistly/chatbots/${id}`)
+      const result = await handleDelete(`${BaseUrl}/api/mysql/assistly/chatbots/${id}`)
      
       if(result.status == 200){
 

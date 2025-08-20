@@ -13,7 +13,7 @@ async function ReviewSessions() {
       const { userId } = await auth()
      if (!userId) redirect("/login")
 
-     const data = await fetch(`/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
+     const data = await fetch(`${baseUrl}/api/mysql/assistly/sessions?id=${userId}`,{method:"GET"})
      const info:AllSessionInfo[] = await data.json()
 
   return (
